@@ -1,0 +1,11 @@
+<!-- courses/templates/courses/view_course.html -->
+{% extends "base.html" %}
+{% block content %}
+  <h1>{{ course.course_title }}</h1>
+  <p><strong>Subtitle:</strong> {{ course.subtitle }}</p>
+  <p><strong>Description:</strong> {{ course.description }}</p>
+  <p><strong>Instructor:</strong> {{ course.instructor }}</p>
+  <p><strong>Department:</strong> {{ course.department }}</p>
+  <!-- Add more fields as needed -->
+  <a href="{% url 'courses:courses_dashboard' %}">Back to Courses Dashboard</a>
+{% endblock %}

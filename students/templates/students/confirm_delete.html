@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+<h3>Are you sure you want to delete {{ student.full_name }}?</h3>
+<form method="POST">
+    {% csrf_token %}
+    <button type="submit">Yes, delete</button>
+    <a href="{% url 'dashboard' %}">Cancel</a>
+</form>
