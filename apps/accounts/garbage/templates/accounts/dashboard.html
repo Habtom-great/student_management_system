@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>LMS Dashboard</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            background: #f4f6f9;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 260px;
+            height: 100vh;
+            position: fixed;
+            background: linear-gradient(180deg, #0f172a, #1e293b);
+            color: #fff;
+            padding-top: 20px;
+            overflow-y: auto;
+        }
+
+        .sidebar h4 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .sidebar a {
+            color: #cbd5e1;
+            display: block;
+            padding: 12px 20px;
+            text-decoration: none;
+            border-left: 3px solid transparent;
+            transition: 0.2s;
+        }
+
+        .sidebar a:hover {
+            background: #334155;
+            border-left: 3px solid #3b82f6;
+            color: #fff;
+        }
+
+        .sidebar small {
+            padding-left: 20px;
+            font-size: 11px;
+            color: #94a3b8;
+        }
+
+        /* MAIN */
+        .main {
+            margin-left: 260px;
+            padding: 20px;
+        }
+
+        /* TOP BAR */
+        .topbar {
+            background: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* CARDS */
+        .card-hover:hover {
+            transform: translateY(-3px);
+            transition: 0.3s;
+        }
+
+        .card {
+            border: none;
+            border-radius: 12px;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+
+    <h4>📘 LMS</h4>
+
+    <a href="/dashboard/"><i class="fa fa-home"></i> Dashboard</a>
+
+    {% if user.role == "admin" or user.role == "staff" %}
+
+        <small>ADMIN PANEL</small>
+
+        <a href="/students/"><i class="fa fa-user"></i> Students</a>
+        <a href="/instructors/"><i class="fa fa-chalkboard-user"></i> Instructors</a>
+        <a href="/staff/"><i class="fa fa-user-tie"></i> Staff</a>
+        <a href="/courses/"><i class="fa fa-book"></i> Courses</a>
+        <a href="/enrollment/"><i class="fa fa-user-plus"></i> Enrollment</a>
+        <a href="/exams/"><i class="fa fa-file"></i> Exams</a>
+        <a href="/payments/"><i class="fa fa-credit-card"></i> Payments</a>
+        <a href="/reports/"><i class="fa fa-chart-line"></i> Reports</a>
+        <a href="/settings/"><i class="fa fa-gear"></i> Settings</a>
+
+    {% elif user.role == "instructor" %}
+
+        <small>INSTRUCTOR PANEL</small>
+
+        <a href="/my-courses/"><i class="fa fa-book-open"></i> My Courses</a>
+        <a href="/materials/"><i class="fa fa-folder"></i> Materials</a>
+        <a href="/assignments/"><i class="fa fa-tasks"></i> Assignments</a>
+        <a href="/gradebook/"><i class="fa fa-marker"></i> Gradebook</a>
+        <a href="/attendance/"><i class="fa fa-calendar-check"></i> Attendance</a>
+
+    {% elif user.role == "student" %}
+
+        <small>STUDENT PANEL</small>
+
+        <a href="/my-courses/"><i class="fa fa-book"></i> My Courses</a>
+        <a href="/materials/"><i class="fa fa-file"></i> Materials</a>
+        <a href="/assignments/"><i class="fa fa-pen"></i> Assignments</a>
+        <a href="/exams/"><i class="fa fa-file-alt"></i> Exams</a>
+        <a href="/results/"><i class="fa fa-chart-bar"></i> Results</a>
+        <a href="/payments/"><i class="fa fa-credit-card"></i> Payments</a>
+        <a href="/profile/"><i class="fa fa-user"></i> Profile</a>
+
+    {% endif %}
+
+    <a href="/accounts/logout/"><i class="fa fa-sign-out"></i> Logout</a>
+
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main">
+
+    <!-- TOP BAR -->
+    <div class="topbar">
+        <h4>Welcome to LMS Dashboard</h4>
+        <span class="badge bg-primary text-uppercase">
+            {{ user.role }}
+        </span>
+    </div>
+
+    <!-- STATS CARDS -->
+    <div class="row g-3">
+
+        <div class="col-md-3">
+            <div class="card card-hover shadow-sm p-3">
+                <h6>Students</h6>
+                <h3>1,250</h3>
+                <small class="text-success">+12% this month</small>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card card-hover shadow-sm p-3">
+                <h6>Courses</h6>
+                <h3>48</h3>
+                <small class="text-success">+5% growth</small>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card card-hover shadow-sm p-3">
+                <h6>Exams</h6>
+                <h3>18</h3>
+                <small class="text-warning">Upcoming</small>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card card-hover shadow-sm p-3">
+                <h6>Payments</h6>
+                <h3>$24,500</h3>
+                <small class="text-success">Revenue</small>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- CHARTS -->
+    <div class="row mt-4">
+
+        <div class="col-md-6">
+            <div class="card p-3 shadow-sm">
+                <h6>Student Growth</h6>
+                <canvas id="lineChart"></canvas>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card p-3 shadow-sm">
+                <h6>Course Distribution</h6>
+                <canvas id="pieChart"></canvas>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- CHART SCRIPT -->
+<script>
+    new Chart(document.getElementById('lineChart'), {
+        type: 'line',
+        data: {
+            labels: ['Jan','Feb','Mar','Apr','May','Jun'],
+            datasets: [{
+                label: 'Students',
+                data: [120, 190, 300, 500, 700, 900],
+                borderColor: '#3b82f6',
+                tension: 0.3
+            }]
+        }
+    });
+
+    new Chart(document.getElementById('pieChart'), {
+        type: 'pie',
+        data: {
+            labels: ['CS', 'Business', 'Engineering', 'Medicine'],
+            datasets: [{
+                data: [30, 25, 25, 20],
+                backgroundColor: ['#3b82f6','#22c55e','#f59e0b','#ef4444']
+            }]
+        }
+    });
+</script>
+
+</body>
+</html>

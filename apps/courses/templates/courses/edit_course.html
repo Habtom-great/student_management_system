@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Edit Course | GITC{% endblock %}
+
+{% block content %}
+<div class="container my-5" style="max-width: 700px;">
+  <h2 class="mb-4 text-primary fw-bold">Edit Course - {{ course.course_title }}</h2>
+
+  <form method="post" enctype="multipart/form-data" class="shadow p-4 bg-white rounded">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <div class="mt-4">
+      <button type="submit" class="btn btn-success">
+        <i class="bi bi-save me-1"></i> Save Changes
+      </button>
+      <a href="{% url 'courses:courses_dashboard' %}" class="btn btn-secondary ms-3">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

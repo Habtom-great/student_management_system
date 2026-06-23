@@ -1,0 +1,28 @@
+{% extends 'students/base.html' %}
+{% block title %}Contact Us{% endblock %}
+{% block content %}
+<h2 class="text-primary mb-4">Contact GITC</h2>
+<div class="row">
+    <div class="col-md-6">
+        <p class="lead">Get in touch with us for admissions, support, or collaboration.</p>
+        <ul class="list-unstyled">
+            <li><strong>Email:</strong> info@gitc.edu.et</li>
+            <li><strong>Phone:</strong> +251-911-234567</li>
+            <li><strong>Address:</strong> Addis Ababa, Ethiopia</li>
+        </ul>
+    </div>
+    <div class="col-md-6">
+        <form>
+            <div class="mb-3">
+                <label class="form-label">Name</label>
+                <input type="text" class="form-control" placeholder="Your Name">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Message</label>
+                <textarea class="form-control" rows="3" placeholder="Your Message"></textarea>
+            </div>
+            <button class="btn btn-primary">Send</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

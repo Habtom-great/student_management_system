@@ -1,0 +1,53 @@
+{% extends 'admin_base.html' %}
+
+{% block body %}
+<div class="container" style="margin: 80px;">
+    <h2>Add Student</h2>
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    {% endfor %}
+{% endif %}
+    <form action="{% url 'students:add_student' %}" method="post">
+        {% csrf_token %}
+
+        <!-- USER INFO -->
+        <input type="text" name="username" class="form-control" placeholder="Username" required><br>
+        <input type="password" name="password" class="form-control" placeholder="Password" required><br>
+
+        <!-- NAME -->
+        <input type="text" name="first_name" class="form-control" placeholder="First Name" required><br>
+        <input type="text" name="middle_name" class="form-control" placeholder="Middle Name"><br>
+        <input type="text" name="last_name" class="form-control" placeholder="Last Name" required><br>
+
+        <!-- MOTHER NAME -->
+        <input type="text" name="mother_name" class="form-control" placeholder="Mother Name" required><br>
+
+        <!-- REGISTRATION NUMBER -->
+        <input type="text" name="registration_number" class="form-control" placeholder="Registration Number" required><br>
+
+        <!-- GENDER -->
+        <select class="form-select" name="gender" required>
+            <option value="" disabled selected>Select Gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+        </select><br>
+
+        <!-- DATE OF BIRTH -->
+        <input type="date" name="date_of_birth" class="form-control"><br>
+
+        <!-- CONTACT -->
+        <input type="text" name="phone" class="form-control" placeholder="Phone" required><br>
+
+        <!-- ADDRESS -->
+        <input type="text" name="city" class="form-control" placeholder="City" required><br>
+        <textarea name="address" class="form-control" placeholder="Address" required></textarea><br>
+
+        <!-- SUBMIT -->
+        <input type="submit" class="btn btn-primary form-control" value="Add Student">
+    </form>
+</div>
+{% endblock %}

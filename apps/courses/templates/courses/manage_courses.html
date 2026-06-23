@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Manage Courses{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">Courses Management</h1>
+
+    <!-- Add Course Button -->
+    <a href="{% url 'courses:add_course' %}" class="btn btn-primary mb-3">
+        + Add New Course
+    </a>
+
+    <!-- Success/Error Messages -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- Courses Table -->
+    <table class="table table-striped table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th>#</th>
+                <th>Course Title</th>
+                <th>Description</th>
+                <th>Instructor</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for course in courses %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ course.title }}</td>
+                <td>{{ course.description|truncatewords:10 }}</td>
+                <td>{{ course.instructor.username|default:"-" }}</td>
+                <td>
+                    <a href="{% url 'courses:edit_course' course.course_id %}" class="btn btn-sm btn-warning">Edit</a>
+                    <a href="{% url 'courses:delete_course' course.course_id %}" class="btn btn-sm btn-danger"
+                       onclick="return confirm('Are you sure you want to delete this course?');">Delete</a>
+                    <a href="{% url 'courses:view_course' course.course_id %}" class="btn btn-sm btn-info">View</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="text-center">No courses found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
