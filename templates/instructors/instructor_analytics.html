@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}Instructor Analytics{% endblock %}
+
+{% block content %}
+
+<div class="container py-4">
+
+    <!-- HEADER -->
+    <div class="p-4 rounded-4 text-white mb-4"
+         style="background: linear-gradient(135deg,#1d4ed8,#9333ea);">
+
+        <h3 class="fw-bold mb-1">📊 Instructor Analytics</h3>
+        <p class="mb-0">Performance overview of all instructors</p>
+
+    </div>
+
+    <!-- STATS -->
+    <div class="row mb-4">
+
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-body text-center">
+                    <h6>Total Instructors</h6>
+                    <h2 class="text-primary">{{ total_instructors }}</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-body text-center">
+                    <h6>Top Instructor</h6>
+                    <h5 class="text-success">
+                        {{ top_instructor.full_name|default:"N/A" }}
+                    </h5>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-body text-center">
+                    <h6>Most Courses</h6>
+                    <h2 class="text-warning">
+                        {{ top_instructor.course_count|default:0 }}
+                    </h2>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- TABLE -->
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+
+            <h5 class="mb-3">Instructor Performance</h5>
+
+            <table class="table table-hover align-middle">
+
+                <thead class="table-dark">
+                    <tr>
+                        <th>Name</th>
+                        <th>Title</th>
+                        <th>Courses</th>
+                        <th>Email</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for i in instructors %}
+                    <tr>
+                        <td>{{ i.full_name }}</td>
+                        <td>{{ i.title|default:"-" }}</td>
+                        <td>
+                            <span class="badge bg-primary">
+                                {{ i.course_count }}
+                            </span>
+                        </td>
+                        <td>{{ i.email|default:"-" }}</td>
+                    </tr>
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

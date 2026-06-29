@@ -91,3 +91,21 @@ def delete_instructor(request, pk):
     return render(request, "instructors/delete_instructor.html", {
         "instructor": instructor
     })
+
+from django.db.models import Count, Avg
+from .models import Instructor
+
+def instructor_analytics(request):
+    instructors = Instructor.objects.annotate(
+        course_count=Count("courses")
+    ).order_by("-course_count")
+
+    total_instructors = instructors.count()
+
+    top_instructor = instructors.first()
+
+    return render(request, "instructors/instructor_analytics.html", {
+        "instructors": instructors,
+        "total_instructors": total_instructors,
+        "top_instructor": top_instructor,
+    })
