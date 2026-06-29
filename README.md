@@ -38,3 +38,28 @@ pip install -r requirements.txt
 
 python manage.py migrate
 python manage.py runserver
+
+templates
+│
+├── base.html
+│
+├── dashboard
+│   ├── home.html
+│   ├── admin_dashboard.html
+│   └── charts.html
+│
+├── students
+│   ├── student_dashboard.html
+│   ├── student_list.html
+│   ├── student_form.html
+│   └── student_detail.html
+│
+├── instructors
+│   ├── instructor_dashboard.html
+│   ├── instructor_list.html
+│   └── instructor_detail.html
+│
+└── courses
+    ├── courses_dashboard.html
+    ├── course_list.html
+    └── course_detail.html

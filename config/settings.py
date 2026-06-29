@@ -2,7 +2,9 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+from django.contrib.messages import constants as messages
 
+MESSAGE_STORAGE = "django.contrib.messages.storage.session.SessionStorage"
 # SECURITY
 SECRET_KEY = 'django-insecure-change-this'
 DEBUG = True
@@ -22,29 +24,30 @@ INSTALLED_APPS = [
     # Third-party Apps
 
     # Local Apps
-    "apps.accounts",
-    "apps.dashboard",
-    "apps.students",
-    "apps.instructors",
-    "apps.departments",
-    "apps.programs",
-    "apps.courses",
-    "apps.lessons",
-    "apps.assignments",
-    "apps.quizzes",
-    "apps.exams",
-    "apps.attendance",
-    "apps.grades",
-    "apps.progress",
-    "apps.certificates",
-    "apps.forum",
-    "apps.messaging",
-    "apps.notifications",
-    "apps.analytics",
-    "apps.reports",
-    "apps.payments",
-    "apps.settings",
-    "apps.api",
+   
+"apps.accounts",
+"apps.dashboard",
+"apps.students",
+"apps.instructors",
+"apps.departments",
+"apps.programs",
+"apps.courses",
+"apps.lessons",
+"apps.assignments",
+"apps.quizzes",
+"apps.exams",
+"apps.attendance",
+"apps.grades",
+"apps.progress",
+"apps.certificates",
+"apps.forum",
+"apps.messaging",
+"apps.notifications",
+"apps.analytics",
+"apps.reports",
+"apps.payments",
+"apps.settings",
+"apps.api",
 ]
 AUTHENTICATION_BACKENDS = [
     "apps.accounts.backends.EmailBackend",

@@ -11,8 +11,6 @@ from apps.courses.models import Course, Enrollment, Instructor
 # PUBLIC PAGES
 # ======================================================
 
-def home(request):
-    return render(request, "accounts/home.html")
 
 
 def register_view(request):
@@ -274,3 +272,7 @@ def dashboard(request):
         elif request.user.role == "student":
             return redirect("student_dashboard")
     return redirect("accounts:home")
+from django.shortcuts import render
+
+def home(request):
+    return render(request, 'dashboard/home.html')

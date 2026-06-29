@@ -1,27 +1,7 @@
 from django.db import models
 from django.conf import settings
-
-# ==========================================================
-# Instructor Profile
-# ==========================================================
-class Instructor(models.Model):
-    user = models.OneToOneField(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name='instructor_profile'
-    )
-
-    bio = models.TextField(blank=True, null=True)
-    phone = models.CharField(max_length=20, blank=True, null=True)
-
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        verbose_name = "Instructor"
-        verbose_name_plural = "Instructors"
-
-    def __str__(self):
-        return self.user.username
+from apps.instructors.models import Instructor
+from apps.students.models import Student
 
 
 # ==========================================================
@@ -92,9 +72,6 @@ class Enrollment(models.Model):
 
     def __str__(self):
         return f"{self.student.username} → {self.course.course_title}"
-    
-from django.db import models
-from django.conf import settings
 
 
 class Lesson(models.Model):
@@ -141,3 +118,4 @@ class Progress(models.Model):
 
     def __str__(self):
         return f"{self.student.username} - {self.lesson.title}"
+        
