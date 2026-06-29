@@ -2,93 +2,100 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
-from .models import Course, Instructor, Enrollment
-from .forms import CourseForm, InstructorForm, StudentForm
+from apps.courses.models import Course, Enrollment
+from apps.instructors.models import Instructor
 
-#==========================
-# PUBLIC COURSE VIEWS
-#==========================
-def about(request):
-    return render(request, 'pages/about.html')
+from .forms import CourseForm, InstructorForm
 
 
-def contact(request):
-    return render(request, 'pages/contact.html')
-
-
-def public_courses(request):
-    courses = Course.objects.filter(is_active=True)
-    return render(request, 'courses/course_list.html', {'courses': courses})
-#==========================
-# COURSE DASHBOARD (ROLE BASED)
-#==========================
 @login_required
 def courses_dashboard(request):
+
     user = request.user
 
-    if user.role == "admin":
+    if hasattr(user, "role") and user.role == "admin":
         courses = Course.objects.all()
 
-    elif user.role == "instructor":
+    elif hasattr(user, "role") and user.role == "instructor":
         instructor = Instructor.objects.get(user=user)
         courses = Course.objects.filter(instructor=instructor)
 
     else:
-        courses = Course.objects.filter(is_active=True)
+        courses = Course.objects.all()
 
-    return render(request, 'courses/dashboard.html', {
-        'courses': courses
+    return render(request, "courses/courses_dashboard.html", {
+        "courses": courses
     })
-#==========================
-# COURSE DETAIL + ENROLLMENT
-#==========================
+
+# ======================================================
+# STATIC PAGES
+# ======================================================
+
+def about(request):
+    return render(request, "pages/about.html")
+
+
+def contact(request):
+    return render(request, "pages/contact.html")
+
+
+# ======================================================
+# PUBLIC COURSE LIST (MAIN PAGE)
+# ======================================================
+
+def course_list(request):
+    courses = Course.objects.all().order_by("-id")
+
+    print("TOTAL COURSES:", courses.count())
+
+    return render(request, "courses/course_list.html", {"courses": courses})
+# ======================================================
+# COURSE DETAIL
+# ======================================================
+
 @login_required
 def course_detail(request, course_id):
+
     course = get_object_or_404(Course, id=course_id)
 
     enrolled = False
-    if request.user.role == "student":
+    if hasattr(request.user, "role") and request.user.role == "student":
         enrolled = Enrollment.objects.filter(
             student=request.user,
             course=course
         ).exists()
 
-    return render(request, 'courses/course_detail.html', {
-        'course': course,
-        'enrolled': enrolled
+    return render(request, "courses/course_detail.html", {
+        "course": course,
+        "enrolled": enrolled
     })
-#==========================
-# INSTRUCTOR CREATE COURSE
-#==========================
+
+
+# ======================================================
+# ADD COURSE (INSTRUCTOR ONLY)
+# ======================================================
 @login_required
-def create_course(request):
-    if request.user.role != "instructor":
-        return redirect('courses_dashboard')
+def add_course(request):
 
-    instructor = Instructor.objects.get(user=request.user)
+    form = CourseForm(request.POST or None, request.FILES or None)
 
-    if request.method == "POST":
-        form = CourseForm(request.POST, request.FILES)
-        if form.is_valid():
-            course = form.save(commit=False)
-            course.instructor = instructor
-            course.save()
+    if form.is_valid():
+        form.save()
+        messages.success(request, "Course added successfully!")
+        return redirect("courses:course_list")
 
-            messages.success(request, "Course created successfully!")
-            return redirect('courses_dashboard')
+    return render(request, "courses/add_course.html", {"form": form})
 
-    else:
-        form = CourseForm()
 
-    return render(request, 'courses/create_course.html', {'form': form})
+# ======================================================
+# ENROLL / UNENROLL
+# ======================================================
 
-#==========================
-# STUDENT ENROLLMENT SYSTEM
-#==========================
 @login_required
 def enroll_course(request, course_id):
+
     if request.user.role != "student":
-        return redirect('courses_dashboard')
+        return redirect("courses:course_list")
 
     course = get_object_or_404(Course, id=course_id)
 
@@ -98,15 +105,14 @@ def enroll_course(request, course_id):
     )
 
     messages.success(request, "Enrolled successfully!")
-    return redirect('course_detail', course_id=course_id)
+    return redirect("courses:course_detail", course_id=course_id)
 
-#==========================
-#UNENROLL
-#==========================
+
 @login_required
 def unenroll_course(request, course_id):
+
     if request.user.role != "student":
-        return redirect('courses_dashboard')
+        return redirect("courses:course_list")
 
     course = get_object_or_404(Course, id=course_id)
 
@@ -116,148 +122,124 @@ def unenroll_course(request, course_id):
     ).delete()
 
     messages.success(request, "Unenrolled successfully!")
-    return redirect('course_detail', course_id=course_id)
-#==========================
-# ADMIN CRUD (COURSES)
-#==========================
+    return redirect("courses:course_detail", course_id=course_id)
+
+
+# ======================================================
+# ADMIN COURSE MANAGEMENT
+# ======================================================
+
 @login_required
-def add_course(request):
+def manage_courses(request):
+
     if request.user.role != "admin":
-        return redirect('courses_dashboard')
+        return redirect("courses:course_list")
 
-    form = CourseForm(request.POST or None, request.FILES or None)
+    courses = Course.objects.all().order_by("-id")
 
-    if form.is_valid():
-        form.save()
-        messages.success(request, "Course added successfully!")
-        return redirect('courses_dashboard')
-
-    return render(request, 'courses/add_course.html', {'form': form})
-#==========================
-# INSTRUCTOR MANAGEMENT
-#==========================
-@login_required
-def manage_instructors(request):
-    instructors = Instructor.objects.all()
-    return render(request, 'instructors/manage_instructors.html', {
-        'instructors': instructors
+    return render(request, "courses/manage_courses.html", {
+        "courses": courses
     })
 
 
-def add_instructor(request):
+@login_required
+def edit_course(request, course_id):
+
     if request.user.role != "admin":
-        return redirect('courses_dashboard')
+        return redirect("courses:course_list")
+
+    course = get_object_or_404(Course, id=course_id)
+
+    form = CourseForm(request.POST or None, request.FILES or None, instance=course)
+
+    if form.is_valid():
+        form.save()
+        messages.success(request, "Course updated successfully!")
+        return redirect("courses:manage_courses")
+
+    return render(request, "courses/edit_course.html", {"form": form})
+
+
+@login_required
+def delete_course(request, course_id):
+
+    if request.user.role != "admin":
+        return redirect("courses:course_list")
+
+    course = get_object_or_404(Course, id=course_id)
+    course.delete()
+
+    messages.success(request, "Course deleted successfully!")
+    return redirect("courses:manage_courses")
+
+
+# ======================================================
+# INSTRUCTOR MANAGEMENT
+# ======================================================
+
+@login_required
+def manage_instructors(request):
+
+    if request.user.role != "admin":
+        return redirect("courses:course_list")
+
+    instructors = Instructor.objects.all()
+
+    return render(request, "instructors/manage_instructors.html", {
+        "instructors": instructors
+    })
+
+
+@login_required
+def add_instructor(request):
+
+    if request.user.role != "admin":
+        return redirect("courses:course_list")
 
     form = InstructorForm(request.POST or None)
 
     if form.is_valid():
         form.save()
         messages.success(request, "Instructor added successfully!")
-        return redirect('manage_instructors')
+        return redirect("courses:manage_instructors")
 
-    return render(request, 'instructors/add_instructor.html', {'form': form})
+    return render(request, "instructors/add_instructor.html", {"form": form})
 
+
+@login_required
 def edit_instructor(request, instructor_id):
+
     if request.user.role != "admin":
-        return redirect('courses_dashboard')
+        return redirect("courses:course_list")
 
     instructor = get_object_or_404(Instructor, id=instructor_id)
+
     form = InstructorForm(request.POST or None, instance=instructor)
 
     if form.is_valid():
         form.save()
         messages.success(request, "Instructor updated successfully!")
-        return redirect('manage_instructors')
+        return redirect("courses:manage_instructors")
 
-    return render(request, 'instructors/edit_instructor.html', {'form': form})
+    return render(request, "instructors/edit_instructor.html", {"form": form})
 
-def course_list(request):
-    courses = Course.objects.filter(is_active=True)
-    return render(request, 'courses/course_list.html', {'courses': courses})
-def manage_courses(request):
-    if request.user.role != "admin":
-        return redirect('courses_dashboard')
 
-    courses = Course.objects.all()
-    return render(request, 'courses/manage_courses.html', {'courses': courses})
-def course_view(request, course_id):
-    course = get_object_or_404(Course, id=course_id)
-    return render(request, 'courses/course_view.html', {'course': course})
-
-def edit_course(request, course_id):
-    if request.user.role != "admin":
-        return redirect('courses_dashboard')
-
-    course = get_object_or_404(Course, id=course_id)
-    form = CourseForm(request.POST or None, request.FILES or None, instance=course)
-
-    if form.is_valid():
-        form.save()
-        messages.success(request, "Course updated successfully!")
-        return redirect('manage_courses')
-
-    return render(request, 'courses/edit_course.html', {'form': form})
-
-def delete_course(request, course_id):
-    if request.user.role != "admin":
-        return redirect('courses_dashboard')
-
-    course = get_object_or_404(Course, id=course_id)
-    course.delete()
-    messages.success(request, "Course deleted successfully!")
-    return redirect('manage_courses')
-
-def about(request):
-    return render(request, 'pages/about.html')
-
-def contact(request):
-    return render(request, 'pages/contact.html')
+# ======================================================
+# ACCOUNTING STATIC PAGE
+# ======================================================
 
 def accounting_details(request):
+
     chapters = [
         {"title": "Introduction", "subtitle": "What is accounting?"},
-        {"title": "Double Entry", "subtitle": "Recording system"},
+        {"title": "Basic Concepts", "subtitle": "Key principles"},
+        {"title": "Double Entry", "subtitle": "Recording transactions"},
         {"title": "Financial Statements", "subtitle": "Reports & analysis"},
+        {"title": "Bank Reconciliation", "subtitle": "Matching records"},
+        {"title": "Depreciation", "subtitle": "Asset reduction"},
+        {"title": "Final Review", "subtitle": "Practice & revision"},
     ]
 
-    return render(request, 'courses/accounting_details.html', {
-        'chapters': chapters
+    return render(request, "courses/accounting_details.html", {
+        "chapters": chapters
     })
-
-
-
-#==========================
-# ACCOUNTING SPECIAL PAGE
-#=========================
-def accounting_details(request):
-    chapters = [
-        {"title": "Introduction", "subtitle": "What is accounting?"},
-        {"title": "Double Entry", "subtitle": "Recording system"},
-        {"title": "Financial Statements", "subtitle": "Reports & analysis"},
-    ]
-
-    return render(request, 'courses/accounting_details.html', {
-        'chapters': chapters
-    })
-
-# ==========================
-# Course Topic Specific Pages
-# ==========================
-
-def accounting_details(request):
-    """Static content for accounting chapters."""
-    chapters = [
-        {"title": "Introduction", "subtitle": "What is accounting?"},
-        {"title": "Basic Concepts", "subtitle": "Key accounting principles"},
-        {"title": "Double Entry System", "subtitle": "Recording transactions"},
-        {"title": "Trial Balance", "subtitle": "Checking accuracy"},
-        {"title": "Adjusting Entries", "subtitle": "Adjustments before final reports"},
-        {"title": "Financial Statements", "subtitle": "Income Statement, Balance Sheet"},
-        {"title": "Cash Flow Statement", "subtitle": "Cash in and out"},
-        {"title": "Bank Reconciliation", "subtitle": "Matching books with bank"},
-        {"title": "Inventory Accounting", "subtitle": "Stock handling and valuation"},
-        {"title": "Depreciation", "subtitle": "Asset usage and reduction"},
-        {"title": "Budgeting", "subtitle": "Planning finances"},
-        {"title": "Revision and Practice", "subtitle": "Final preparation"},
-    ]
-    return render(request, 'courses/accounting_details.html', {'chapters': chapters})

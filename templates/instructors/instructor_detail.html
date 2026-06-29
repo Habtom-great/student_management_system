@@ -1,0 +1,189 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Instructor Profile{% endblock %}
+
+{% block content %}
+
+<div class="container py-4">
+
+    <!-- HEADER PROFILE CARD -->
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body">
+
+            <div class="row align-items-center">
+
+                <!-- PHOTO -->
+                <div class="col-md-2 text-center">
+
+                    {% if instructor.photo %}
+                        <img src="{{ instructor.photo.url }}"
+                             class="rounded-circle border shadow-sm"
+                             width="110"
+                             height="125"
+                             style="object-fit: cover;">
+                    {% else %}
+                        <img src="{% static 'images/default-user.png' %}"
+                             class="rounded-circle border shadow-sm"
+                             width="110"
+                             height="110">
+                    {% endif %}
+
+                </div>
+
+                <!-- BASIC INFO -->
+                <div class="col-md-7">
+
+                    <h4 class="fw-bold mb-1">
+                        {{ instructor.full_name }}
+                    </h4>
+
+                    <p class="text-muted mb-1">
+                        {{ instructor.title|default:"Lecturer / Instructor" }}
+                    </p>
+
+                    <p class="small text-secondary mb-2">
+                        {{ instructor.bio|default:"No biography available." }}
+                    </p>
+
+                    <div class="d-flex gap-2 flex-wrap">
+
+                        <span class="badge bg-primary">
+                            📚 {{ courses.count }} Courses
+                        </span>
+
+                        <span class="badge bg-success">
+                            🧑‍🎓 Active Instructor
+                        </span>
+
+                        <span class="badge bg-dark">
+                            📧 {{ instructor.email|default:"No email" }}
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <!-- ACTIONS -->
+                <div class="col-md-3 text-end">
+
+                    <a href="{% url 'instructors:edit' instructor.id %}"
+                       class="btn btn-warning btn-sm">
+                        Edit Profile
+                    </a>
+
+                    <a href="{% url 'instructors:delete' instructor.id %}"
+                       class="btn btn-danger btn-sm">
+                        Delete
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- =========================
+         HISTORY SECTION
+    ========================== -->
+
+    <div class="row">
+
+        <!-- COURSES HISTORY -->
+        <div class="col-md-8">
+
+            <div class="card border-0 shadow-sm mb-4">
+
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">📘 Teaching History (Courses)</h5>
+                </div>
+
+                <div class="card-body">
+
+                    {% for course in courses %}
+
+                        <div class="d-flex justify-content-between align-items-center border-bottom py-2">
+
+                            <div>
+                                <h6 class="mb-0">{{ course.title }}</h6>
+                                <small class="text-muted">
+                                    {{ course.created_at|date:"M d, Y" }}
+                                </small>
+                            </div>
+
+                            <a href="{% url 'courses:course_detail' course.id %}"
+                               class="btn btn-sm btn-outline-primary">
+                                View Course
+                            </a>
+
+                        </div>
+
+                    {% empty %}
+
+                        <p class="text-muted">No courses assigned yet.</p>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- SIDE HISTORY PANEL -->
+        <div class="col-md-4">
+
+            <!-- QUICK STATS -->
+            <div class="card border-0 shadow-sm mb-3">
+
+                <div class="card-header bg-white">
+                    <h6 class="mb-0">📊 Summary</h6>
+                </div>
+
+                <div class="card-body">
+
+                    <p class="mb-1">Total Courses:
+                        <strong>{{ courses.count }}</strong>
+                    </p>
+
+                    <p class="mb-1">Joined:
+                        <strong>{{ instructor.id }}</strong>
+                    </p>
+
+                    <p class="mb-0">Status:
+                        <span class="badge bg-success">Active</span>
+                    </p>
+
+                </div>
+
+            </div>
+
+            <!-- CONTACT INFO -->
+            <div class="card border-0 shadow-sm">
+
+                <div class="card-header bg-white">
+                    <h6 class="mb-0">📞 Contact</h6>
+                </div>
+
+                <div class="card-body small">
+
+                    <p class="mb-1">
+                        📧 {{ instructor.email|default:"No email" }}
+                    </p>
+
+                    <p class="mb-1">
+                        📱 {{ instructor.phone|default:"No phone" }}
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

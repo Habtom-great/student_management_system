@@ -38,3 +38,49 @@ pip install -r requirements.txt
 
 python manage.py migrate
 python manage.py runserver
+
+
+kkkkkkk
+student_management_system/
+
+├── apps/
+│   ├── accounts/
+│   ├── students/
+│   ├── instructors/
+│   ├── staff/
+│   ├── departments/
+│   ├── programs/
+│   ├── courses/
+│   ├── lessons/
+│   ├── attendance/
+│   ├── grades/
+│   ├── assignments/
+│   ├── quizzes/
+│   ├── exams/
+│   ├── certificates/
+│   ├── reports/
+│   ├── analytics/
+│   ├── messaging/
+│   ├── notifications/
+│   ├── dashboard/
+│   ├── api/
+│   └── payments/
+│
+├── config/
+│   ├── settings/
+│   │   ├── base.py
+│   │   ├── development.py
+│   │   └── production.py
+│   ├── urls.py
+│   ├── asgi.py
+│   └── wsgi.py
+│
+├── templates/
+├── static/
+├── media/
+├── docs/
+├── scripts/
+├── requirements/
+├── manage.py
+├── README.md
+└── .env

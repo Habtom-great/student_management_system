@@ -8,3 +8,18 @@ class CustomUserCreationForm(UserCreationForm):
         model = User
         fields = ['username', 'email', 'password1', 'password2']
 
+from django import forms
+from .models import Course
+
+class CourseForm(forms.ModelForm):
+    class Meta:
+        model = Course
+        fields = [
+            'title',
+            'code',
+            'instructor',
+            'credits',
+            'description',
+            'category',
+            'thumbnail'
+        ]

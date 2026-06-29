@@ -1,0 +1,589 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>GITC LMS | Home</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --gitc-navy: #0f2a4a;
+            --gitc-blue: #1d5fb0;
+            --gitc-blue-dark: #134382;
+            --gitc-gold: #e8a13c;
+            --gitc-slate: #45526b;
+            --gitc-bg: #f6f8fb;
+        }
+
+        body {
+            background-color: var(--gitc-bg);
+            font-family: 'Inter', sans-serif;
+            color: var(--gitc-slate);
+        }
+
+        h1, h2, h3, h4, h5, .navbar-brand {
+            font-family: 'Lexend', sans-serif;
+            color: var(--gitc-navy);
+        }
+
+        /* ---------- Navbar ---------- */
+        .navbar-brand {
+            font-weight: 700;
+            letter-spacing: 0.02em;
+        }
+        .navbar-brand .accent {
+            color: var(--gitc-gold);
+        }
+
+        /* ---------- Hero ---------- */
+        .hero {
+            background: linear-gradient(135deg, var(--gitc-navy) 0%, var(--gitc-blue) 100%);
+            color: #fff;
+            border-radius: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at 85% 15%, rgba(255,255,255,0.08) 0%, transparent 45%),
+                radial-gradient(circle at 10% 90%, rgba(255,255,255,0.06) 0%, transparent 40%);
+            pointer-events: none;
+        }
+        .hero h1 {
+            color: #fff;
+            line-height: 1.15;
+        }
+        .hero .lead {
+            color: rgba(255,255,255,0.88);
+            max-width: 540px;
+        }
+        .hero-tags .badge {
+            background: rgba(255,255,255,0.12);
+            color: #fff;
+            font-weight: 500;
+            font-size: 0.8rem;
+            padding: 0.5em 0.9em;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .btn-cta {
+            background-color: var(--gitc-gold);
+            border-color: var(--gitc-gold);
+            color: var(--gitc-navy);
+            font-weight: 600;
+        }
+        .btn-cta:hover {
+            background-color: #d6912f;
+            border-color: #d6912f;
+            color: var(--gitc-navy);
+        }
+        .btn-outline-hero {
+            border-color: rgba(255,255,255,0.6);
+            color: #fff;
+            font-weight: 500;
+        }
+        .btn-outline-hero:hover {
+            background-color: rgba(255,255,255,0.12);
+            border-color: #fff;
+            color: #fff;
+        }
+        .hero-image-wrap {
+            border-radius: 18px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+        .hero-image-wrap img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* ---------- Admission banner ---------- */
+        .admission-banner {
+            background-color: #ffffff;
+            border: 1px solid #e3e8ef;
+            border-left: 6px solid var(--gitc-gold);
+            border-radius: 16px;
+        }
+        .admission-banner h2 {
+            font-size: 1.35rem;
+            margin-bottom: 0.4rem;
+        }
+        .badge-open {
+            background-color: rgba(232,161,60,0.15);
+            color: #a06b1a;
+            font-weight: 600;
+            font-size: 0.75rem;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            padding: 0.35em 0.7em;
+        }
+
+        /* ---------- Feature cards ---------- */
+        .section-label {
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--gitc-blue);
+        }
+        .adv-card {
+            border: 1px solid #e9edf3;
+            border-radius: 16px;
+            background: #fff;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            height: 100%;
+        }
+        .adv-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(15,42,74,0.08);
+        }
+        .adv-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 12px;
+            background: rgba(29,95,176,0.1);
+            color: var(--gitc-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+        }
+
+        /* ---------- Course thumbnails ---------- */
+        .course-card {
+            border: 1px solid #e9edf3;
+            border-radius: 16px;
+            background: #fff;
+            overflow: hidden;
+            height: 100%;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .course-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(15,42,74,0.08);
+        }
+        .course-thumb {
+            position: relative;
+            aspect-ratio: 16 / 10;
+            overflow: hidden;
+            background-color: #e9edf3;
+        }
+        .course-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .course-thumb .badge-category {
+            position: absolute;
+            top: 0.75rem;
+            left: 0.75rem;
+            background: rgba(15,42,74,0.85);
+            color: #fff;
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+            padding: 0.3em 0.7em;
+        }
+        .course-card .card-body h6 {
+            font-family: 'Lexend', sans-serif;
+            color: var(--gitc-navy);
+        }
+        .course-card .card-body .text-price {
+            color: var(--gitc-blue);
+            font-weight: 700;
+        }
+
+        /* ---------- Testimonials ---------- */
+        .testimonial-card {
+            border: 1px solid #e9edf3;
+            border-radius: 16px;
+            background: #fff;
+            height: 100%;
+        }
+        .testimonial-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #fff;
+            box-shadow: 0 0 0 2px var(--gitc-blue);
+        }
+        .testimonial-quote-icon {
+            color: rgba(29,95,176,0.18);
+            font-size: 2rem;
+            line-height: 1;
+        }
+        .testimonial-rating i {
+            color: var(--gitc-gold);
+            font-size: 0.85rem;
+        }
+
+        /* ---------- Footer ---------- */
+        footer {
+            background-color: var(--gitc-navy);
+            color: rgba(255,255,255,0.75);
+        }
+        footer a {
+            color: rgba(255,255,255,0.85);
+            text-decoration: none;
+        }
+        footer a:hover {
+            color: var(--gitc-gold);
+        }
+    </style>
+</head>
+<body>
+
+<!-- ================= NAVBAR ================= -->
+<nav class="navbar navbar-expand-lg bg-white shadow-sm sticky-top">
+    <div class="container py-2">
+        <a class="navbar-brand" href="{% url 'home' %}">GITC- app/accounts/template/accounts/home<span class="accent">LMS</span></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
+                aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="mainNav">
+            <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-3">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'courses:course_list' %}">Courses</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#about">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#contact">Contact</a>
+                </li>
+                <li class="nav-item ms-lg-2">
+                    <a class="btn btn-outline-primary btn-sm" href="{% url 'accounts:login' %}">Log in</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<main class="container py-4">
+
+    <!-- ================= HERO SECTION ================= -->
+    <section class="hero p-5 mb-4 shadow-sm" aria-labelledby="hero-heading">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-7">
+                <div class="hero-tags d-flex gap-2 flex-wrap mb-3">
+                    <span class="badge rounded-pill">Accounting</span>
+                    <span class="badge rounded-pill">IT</span>
+                    <span class="badge rounded-pill">Engineering</span>
+                    <span class="badge rounded-pill">Health Sciences</span>
+                </div>
+                <h1 id="hero-heading" class="display-5 fw-bold">
+                    Learn without limits.
+                </h1>
+                <p class="lead mt-3">
+                    Build real, job-ready skills in Accounting, Business, IT, Engineering,
+                    and Health Sciences — taught by working professionals and backed by
+                    industry-recognized certification.
+                </p>
+                <div class="d-flex flex-wrap gap-2 mt-4">
+                    <a href="{% url 'courses:course_list' %}" class="btn btn-cta btn-lg">
+                        Browse courses
+                    </a>
+                    <a href="{% url 'accounts:login' %}" class="btn btn-outline-hero btn-lg">
+                        Log in
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-5">
+                <div class="hero-image-wrap" style="max-height: 320px;">
+                    <img src="{% static 'images/training.jpg' %}"
+                         alt="Students attending a GITC training session"
+                         style="max-height: 320px;">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= ADMISSION BANNER ================= -->
+    <section class="admission-banner p-4 p-lg-5 mb-5 shadow-sm">
+        <div class="row align-items-center g-3">
+            <div class="col-lg-8">
+                <span class="badge badge-open rounded-pill mb-2">Admissions open</span>
+                <h2>2026 academic year enrollment is now open</h2>
+                <p class="mb-0">
+                    Register today for professional programs in Accounting, IT, Engineering,
+                    Business, and Health Sciences. Seats are limited.
+                </p>
+            </div>
+            <div class="col-lg-4 text-lg-end">
+                <a href="{% url 'accounts:login' %}" class="btn btn-cta btn-lg">
+                    Apply now
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= FEATURED COURSES ================= -->
+    <section class="mb-5" aria-labelledby="courses-heading">
+        <div class="d-flex justify-content-between align-items-end flex-wrap gap-2 mb-4">
+            <div>
+                <div class="section-label">Featured programs</div>
+                <h2 id="courses-heading" class="fw-bold mb-0">Popular courses this term</h2>
+            </div>
+            <a href="{% url 'courses:course_list' %}" class="btn btn-outline-primary">
+                View all courses
+            </a>
+        </div>
+        <div class="row g-4">
+            {% for course in featured_courses %}
+            <div class="col-md-6 col-lg-3">
+                <div class="card course-card">
+                    <div class="course-thumb">
+                        {% if course.thumbnail %}
+                            <img src="{{ course.thumbnail.url }}" alt="{{ course.title }} course thumbnail">
+                        {% else %}
+                            <img src="{% static 'images/course-placeholder.jpg' %}" alt="{{ course.title }} course thumbnail">
+                        {% endif %}
+                        <span class="badge-category">{{ course.category }}</span>
+                    </div>
+                    <div class="card-body">
+                        <h6 class="fw-semibold mb-1">{{ course.title }}</h6>
+                        <p class="mb-2 small">{{ course.instructor.get_full_name|default:course.instructor }}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-price">{{ course.price|default:"Free" }}</span>
+                            <a href="{% url 'courses:course_detail' course.slug %}" class="btn btn-sm btn-outline-primary">View</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-md-6 col-lg-3">
+                <div class="card course-card">
+                    <div class="course-thumb">
+                        <img src="{% static 'images/courses/accounting.jpg' %}" alt="Accounting course thumbnail">
+                        <span class="badge-category">Accounting</span>
+                    </div>
+                    <div class="card-body">
+                        <h6 class="fw-semibold mb-1">Financial Accounting Fundamentals</h6>
+                        <p class="mb-2 small">Instructor: A. Bekele</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-price">1,200 ETB</span>
+                            <a href="{% url 'courses:course_list' %}" class="btn btn-sm btn-outline-primary">View</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="card course-card">
+                    <div class="course-thumb">
+                        <img src="{% static 'images/courses/it.jpg' %}" alt="IT and networking course thumbnail">
+                        <span class="badge-category">IT</span>
+                    </div>
+                    <div class="card-body">
+                        <h6 class="fw-semibold mb-1">Networking & IT Support</h6>
+                        <p class="mb-2 small">Instructor: S. Tesfaye</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-price">1,500 ETB</span>
+                            <a href="{% url 'courses:course_list' %}" class="btn btn-sm btn-outline-primary">View</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="card course-card">
+                    <div class="course-thumb">
+                        <img src="{% static 'images/courses/engineering.jpg' %}" alt="Engineering course thumbnail">
+                        <span class="badge-category">Engineering</span>
+                    </div>
+                    <div class="card-body">
+                        <h6 class="fw-semibold mb-1">Civil Engineering Essentials</h6>
+                        <p class="mb-2 small">Instructor: M. Alemu</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-price">1,800 ETB</span>
+                            <a href="{% url 'courses:course_list' %}" class="btn btn-sm btn-outline-primary">View</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="card course-card">
+                    <div class="course-thumb">
+                        <img src="{% static 'images/courses/health.jpg' %}" alt="Health sciences course thumbnail">
+                        <span class="badge-category">Health Sciences</span>
+                    </div>
+                    <div class="card-body">
+                        <h6 class="fw-semibold mb-1">Introduction to Public Health</h6>
+                        <p class="mb-2 small">Instructor: H. Girma</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-price">1,000 ETB</span>
+                            <a href="{% url 'courses:course_list' %}" class="btn btn-sm btn-outline-primary">View</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- ================= FEATURES ================= -->
+    <section class="mb-5" aria-labelledby="features-heading">
+        <div class="text-center mb-4">
+            <div class="section-label">Why GITC</div>
+            <h2 id="features-heading" class="fw-bold">A learning experience built for results</h2>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card adv-card p-4">
+                    <div class="adv-icon">
+                        <i class="bi bi-collection"></i>
+                    </div>
+                    <h5 class="fw-semibold">120+ courses</h5>
+                    <p class="mb-0">Accounting, IT, Engineering, and Business programs designed around real-world skills.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card adv-card p-4">
+                    <div class="adv-icon">
+                        <i class="bi bi-person-workspace"></i>
+                    </div>
+                    <h5 class="fw-semibold">Expert instructors</h5>
+                    <p class="mb-0">Learn directly from experienced practitioners working in the field today.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card adv-card p-4">
+                    <div class="adv-icon">
+                        <i class="bi bi-patch-check"></i>
+                    </div>
+                    <h5 class="fw-semibold">Verified certification</h5>
+                    <p class="mb-0">Earn a verified certificate of completion to showcase on your resume and LinkedIn.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= TESTIMONIALS ================= -->
+    <section class="mb-5" aria-labelledby="testimonials-heading">
+        <div class="text-center mb-4">
+            <div class="section-label">Student stories</div>
+            <h2 id="testimonials-heading" class="fw-bold">What our graduates say</h2>
+        </div>
+        <div class="row g-4">
+            {% for testimonial in testimonials %}
+            <div class="col-md-4">
+                <div class="card testimonial-card p-4">
+                    <i class="bi bi-quote testimonial-quote-icon mb-2"></i>
+                    <p class="mb-3">{{ testimonial.quote }}</p>
+                    <div class="d-flex align-items-center gap-3">
+                        <img src="{{ testimonial.photo.url }}" alt="Photo of {{ testimonial.name }}" class="testimonial-avatar">
+                        <div>
+                            <h6 class="mb-0 fw-semibold">{{ testimonial.name }}</h6>
+                            <p class="mb-0 small">{{ testimonial.course }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-md-4">
+                <div class="card testimonial-card p-4">
+                    <i class="bi bi-quote testimonial-quote-icon mb-2"></i>
+                    <div class="testimonial-rating mb-2">
+                        <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                    </div>
+                    <p class="mb-3">GITC's Accounting program gave me practical, hands-on skills I use every day at work. The instructors actually care about your progress.</p>
+                    <div class="d-flex align-items-center gap-3">
+                        <img src="{% static 'images/testimonials/student1.jpg' %}" alt="Photo of Sara M." class="testimonial-avatar">
+                        <div>
+                            <h6 class="mb-0 fw-semibold">Sara M.</h6>
+                            <p class="mb-0 small">Financial Accounting graduate</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card testimonial-card p-4">
+                    <i class="bi bi-quote testimonial-quote-icon mb-2"></i>
+                    <div class="testimonial-rating mb-2">
+                        <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                    </div>
+                    <p class="mb-3">I went from knowing nothing about networking to landing an IT support role within months of finishing the course. Highly recommended.</p>
+                    <div class="d-flex align-items-center gap-3">
+                        <img src="{% static 'images/testimonials/student2.jpg' %}" alt="Photo of Daniel K." class="testimonial-avatar">
+                        <div>
+                            <h6 class="mb-0 fw-semibold">Daniel K.</h6>
+                            <p class="mb-0 small">IT Support graduate</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card testimonial-card p-4">
+                    <i class="bi bi-quote testimonial-quote-icon mb-2"></i>
+                    <div class="testimonial-rating mb-2">
+                        <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-half"></i>
+                    </div>
+                    <p class="mb-3">The certification carried real weight with employers. GITC made it easy to study while working full-time.</p>
+                    <div class="d-flex align-items-center gap-3">
+                        <img src="{% static 'images/testimonials/student3.jpg' %}" alt="Photo of Helen T." class="testimonial-avatar">
+                        <div>
+                            <h6 class="mb-0 fw-semibold">Helen T.</h6>
+                            <p class="mb-0 small">Public Health graduate</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+</main>
+
+<!-- ================= FOOTER ================= -->
+<footer class="py-5 mt-4">
+    <div class="container">
+        <div class="row gy-4">
+            <div class="col-lg-4">
+                <h5 class="text-white fw-bold">GITC<span style="color: var(--gitc-gold);">LMS</span></h5>
+                <p class="mb-0">Professional, career-focused learning in Accounting, IT, Engineering, Business, and Health Sciences.</p>
+            </div>
+            <div class="col-lg-2 col-6">
+                <h6 class="text-white mb-3">Explore</h6>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><a href="{% url 'courses:course_list' %}">Courses</a></li>
+                    <li class="mb-2"><a href="#about">About</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-2 col-6">
+                <h6 class="text-white mb-3">Account</h6>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><a href="{% url 'accounts:login' %}">Log in</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-4" id="contact">
+                <h6 class="text-white mb-3">Contact</h6>
+                <p class="mb-1"><i class="bi bi-envelope me-2"></i>info@gitc.edu.et</p>
+                <p class="mb-0"><i class="bi bi-telephone me-2"></i>+251 11 000 0000</p>
+            </div>
+        </div>
+        <hr class="border-secondary my-4">
+        <p class="mb-0 text-center" style="font-size: 0.85rem;">
+            &copy; {% now "Y" %} GITC LMS. All rights reserved.
+        </p>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -6,7 +6,7 @@ class UserAdmin(BaseUserAdmin):
 
     fieldsets = BaseUserAdmin.fieldsets + (
         ('Additional Info', {
-            'fields': ('address',)
+            'fields': ()  # empty for now
         }),
     )
 

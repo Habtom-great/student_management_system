@@ -20,3 +20,12 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.username
+    
+class Course(models.Model):
+    title = models.CharField(max_length=255)
+    code = models.CharField(max_length=20, unique=True)
+    instructor = models.ForeignKey('instructors.Instructor', on_delete=models.SET_NULL, null=True)
+    credits = models.IntegerField(default=3)
+    description = models.TextField()
+    category = models.CharField(max_length=100)
+    thumbnail = models.ImageField(upload_to='courses/', null=True, blank=True)

@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home | LMS Platform{% endblock %}
+
+{% block content %}
+
+<!-- HERO SECTION -->
+<div class="container-fluid py-5 bg-dark text-white">
+    <div class="container">
+        <div class="row align-items-center">
+
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold">
+                    Learn Skills That Matter
+                </h1>
+
+                <p class="lead mt-3">
+                    Join thousands of students learning Accounting, Programming,
+                    Business, Engineering, and Health Sciences in one powerful LMS.
+                </p>
+
+                <a href="{% url 'courses:course_list' %}" class="btn btn-warning btn-lg mt-3">
+                    Explore Courses
+                </a>
+            </div>
+
+            <div class="col-lg-6 text-center">
+                <img src="{% static 'images/training.jpg' %}"
+                     class="img-fluid rounded-4 shadow"
+                     style="max-height:400px;">
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- STATS SECTION -->
+<div class="container py-5">
+    <div class="row text-center">
+
+        <div class="col-md-3">
+            <div class="card shadow-sm p-4 border-0 rounded-4">
+                <h2 class="fw-bold text-primary">{{ total_students|default:"1200+" }}</h2>
+                <p>Students</p>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm p-4 border-0 rounded-4">
+                <h2 class="fw-bold text-success">{{ total_courses|default:"85+" }}</h2>
+                <p>Courses</p>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm p-4 border-0 rounded-4">
+                <h2 class="fw-bold text-warning">{{ total_instructors|default:"25+" }}</h2>
+                <p>Instructors</p>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow-sm p-4 border-0 rounded-4">
+                <h2 class="fw-bold text-danger">{{ total_enrollments|default:"5000+" }}</h2>
+                <p>Enrollments</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- FEATURED COURSES -->
+<div class="container pb-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="fw-bold">🔥 Featured Courses</h3>
+        <a href="{% url 'courses:course_list' %}" class="btn btn-outline-primary btn-sm">
+            View All
+        </a>
+    </div>
+
+    <div class="row">
+
+        {% for course in courses|slice:":6" %}
+
+        <div class="col-md-4 mb-4">
+
+            <div class="card shadow-sm border-0 rounded-4 h-100">
+
+                <img src="{% static 'images/course.jpg' %}"
+                     class="card-img-top"
+                     style="height:180px; object-fit:cover;">
+
+                <div class="card-body">
+
+                    <h5 class="fw-bold">{{ course.name }}</h5>
+                    <p class="text-muted">{{ course.code }}</p>
+
+                    <p class="small">
+                        Learn practical skills with expert instructors.
+                    </p>
+
+                    <a href="{% url 'courses:course_detail' course.id %}"
+                       class="btn btn-primary btn-sm">
+                        View Course
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% empty %}
+
+        <p class="text-muted">No courses available yet.</p>
+
+        {% endfor %}
+
+    </div>
+</div>
+
+
+<!-- CTA SECTION -->
+<div class="container-fluid bg-primary text-white py-5">
+    <div class="container text-center">
+
+        <h2 class="fw-bold">Start Learning Today</h2>
+        <p class="mb-4">
+            Build your future with professional courses designed for real-world success.
+        </p>
+
+        <a href="{% url 'accounts:login' %}" class="btn btn-warning btn-lg">
+            Get Started
+        </a>
+
+    </div>
+</div>
+
+{% endblock %}

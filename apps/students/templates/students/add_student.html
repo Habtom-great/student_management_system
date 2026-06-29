@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container mt-4">
+    <div class="card shadow-sm p-4" style="max-width: 800px; margin:auto; border-radius: 15px;">
+        
+        <h3 class="mb-4 text-center">👨‍🎓 Add Student</h3>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-success alert-dismissible fade show">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <form action="{% url 'students:add_student' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <!-- IMAGE -->
+            <div class="mb-3 text-center">
+                <img id="preview" src="https://via.placeholder.com/120"
+                     class="rounded-circle mb-2" width="120" height="120" style="object-fit:cover;">
+                <input type="file" name="photo" class="form-control" onchange="loadFile(event)">
+            </div>
+
+            <!-- GRID FORM -->
+            <div class="row g-2">
+
+                <div class="col-md-6">
+                    <input type="text" name="first_name" class="form-control" placeholder="First Name" required>
+                </div>
+
+                <div class="col-md-6">
+                    <input type="text" name="last_name" class="form-control" placeholder="Last Name" required>
+                </div>
+
+                <div class="col-md-6">
+                    <input type="text" name="username" class="form-control" placeholder="Username" required>
+                </div>
+
+                <div class="col-md-6">
+                    <input type="password" name="password" class="form-control" placeholder="Password" required>
+                </div>
+
+                <div class="col-md-6">
+                    <input type="text" name="registration_number" class="form-control" placeholder="Reg No" required>
+                </div>
+
+                <div class="col-md-6">
+                    <select name="gender" class="form-select" required>
+                        <option disabled selected>Gender</option>
+                        <option>Male</option>
+                        <option>Female</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <input type="date" name="date_of_birth" class="form-control">
+                </div>
+
+                <div class="col-md-6">
+                    <input type="text" name="phone" class="form-control" placeholder="Phone">
+                </div>
+
+                <div class="col-md-6">
+                    <input type="text" name="city" class="form-control" placeholder="City">
+                </div>
+
+                <div class="col-md-6">
+                    <input type="text" name="mother_name" class="form-control" placeholder="Mother Name">
+                </div>
+
+            </div>
+
+            <div class="mt-2">
+                <textarea name="address" class="form-control" rows="2" placeholder="Address"></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 mt-3">
+                ➕ Save Student
+            </button>
+
+        </form>
+    </div>
+</div>
+
+<!-- IMAGE PREVIEW SCRIPT -->
+<script>
+function loadFile(event) {
+    var image = document.getElementById('preview');
+    image.src = URL.createObjectURL(event.target.files[0]);
+}
+</script>
+
+{% endblock %}

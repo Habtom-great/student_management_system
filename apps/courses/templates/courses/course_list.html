@@ -2,93 +2,150 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>All Courses</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    body {
-      background-color: #f8f9fa;
-    }
-    .course-card {
-      transition: transform 0.4s ease, box-shadow 0.4s ease;
-      background-color: #fff;
-      border-radius: 20px;
-    }
-    .course-card:hover {
-      transform: translateY(-8px) scale(1.02);
-      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.15);
-    }
-    .overlay {
-      background: linear-gradient(to bottom, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.6));
-      border-top-left-radius: 20px;
-      border-top-right-radius: 20px;
-      z-index: 1;
-    }
-    .badge-date {
-      background-color: #ffffffdd;
-      padding: 4px 10px;
-      font-size: 13px;
-      font-weight: 600;
-      border-radius: 50px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-      z-index: 2;
-    }
-    .text-gradient {
-      background: linear-gradient(to right, #007bff, #6610f2);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Course Lists</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+<style>
+body{background:#f8f9fa}
+.course-card{transition:.25s; border-radius:16px}
+.course-card:hover{transform:translateY(-4px);box-shadow:0 12px 24px rgba(0,0,0,.1)}
+.overlay{background:linear-gradient(to bottom,rgba(0,0,0,.05),rgba(0,0,0,.4));border-radius:16px 16px 0 0}
+.badge-date{background:#fff;padding:4px 10px;font-size:12px;border-radius:50px}
+.course-thumb{height:200px;object-fit:cover}
+.tutor-avatar{width:42px;height:42px;object-fit:cover}
+</style>
 </head>
+
 <body>
 
 <div class="container py-5">
-  <h2 class="mb-4 text-center fw-bold text-primary">📚 All Available Courses</h2>
-  <div class="row g-4">
-    {% for course in courses %}
-      <div class="col-lg-4 col-md-6 col-sm-12">
 
-        {# DEBUG: Print course title for verification #}
-        <!-- <p>{{ course.course_title }}</p> -->
-
-        {% if course.course_title|lower == "principles of accounting" %}
-        <a href="{% url 'courses:view_course' course.pk %}" class="text-decoration-none text-dark">
-
-         
-        {% else %}
-          <a href="{% url 'courses:view_course' course.pk %}" class="text-decoration-none text-dark">
-        {% endif %}
-
-          <div class="card course-card h-100 border-0 shadow-lg rounded-4 overflow-hidden position-relative">
-            <div class="position-relative">
-              <img src="{{ course.thumb_image.url }}" class="card-img-top" alt="{{ course.course_title }}" style="height: 200px; object-fit: cover;">
-              <div class="overlay position-absolute top-0 start-0 w-100 h-100"></div>
-              <div class="badge-date position-absolute top-0 end-0 m-2">
-                📅 {{ course.created_at|date:"M d, Y" }}
-              </div>
-            </div>
-            <div class="card-body p-4">
-              <h5 class="card-title fw-semibold text-gradient mb-2">{{ course.course_title|truncatechars:40 }}</h5>
-              <p class="card-text text-muted mb-3" style="font-size: 14px;">{{ course.course_subtitle|truncatechars:60 }}</p>
-              <div class="d-flex align-items-center">
-                <img src="{{ course.tutor_image.url }}" class="rounded-circle border border-2 me-3 shadow-sm" alt="{{ course.tutor_name }}" width="45" height="45">
-                <div>
-                  <div class="fw-bold text-dark" style="font-size: 14px;">{{ course.tutor_name }}</div>
-                  <small class="text-muted">Instructor</small>
-                </div>
-              </div>
-            </div>
-          </div>
-        </a>
-      </div>
-    {% empty %}
-      <div class="col-12 text-center text-muted">
-        No courses available at the moment.
-      </div>
-    {% endfor %}
-  </div>
+<div class="text-center mb-5">
+<h2 class="fw-bold">
+<i class="bi bi-mortarboard-fill text-primary"></i> Course Lists
+</h2>
+<p class="text-muted">Browse available courses and start learning</p>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<div class="row g-4">
+
+{% for course in courses %}
+<div class="col-lg-4 col-md-6">
+
+<a href="{% url 'courses:course_detail' course.id %}" class="text-decoration-none text-dark">
+
+<div class="card course-card h-100 border-0 shadow-sm overflow-hidden">
+
+<!-- THUMBNAIL -->
+<div class="position-relative">
+
+    {% if course.instructor %}
+<div class="d-flex align-items-center mt-3">
+
+    {% if course.instructor.photo %}
+        <img src="{{ course.instructor.photo.url }}"
+             class="rounded-circle me-3"
+             width="50"
+             height="50"
+             style="object-fit:cover;">
+    {% else %}
+        <img src="{% static 'images/default-user.png' %}"
+             class="rounded-circle me-3"
+             width="50"
+             height="50">
+    {% endif %}
+
+    <div>
+        <h6 class="mb-0">{{ course.instructor.full_name }}</h6>
+        <small class="text-muted">
+            {{ course.instructor.title }}
+        </small>
+    </div>
+
+</div>
+{% endif %}
+{% if course.thumb_image %}
+    <img src="{{ course.thumb_image.url }}"
+         class="card-img-top course-thumb"
+         alt="{{ course.title }}">
+{% else %}
+    <img src="{% static 'img/default-course.jpg' %}"
+         class="card-img-top course-thumb"
+         alt="default">
+{% endif %}
+
+<div class="overlay position-absolute top-0 start-0 w-100 h-100"></div>
+
+<span class="badge-date position-absolute top-0 end-0 m-2">
+<i class="bi bi-calendar3"></i> {{ course.created_at|date:"M d, Y" }}
+</span>
+
+</div>
+
+<!-- BODY -->
+<div class="card-body p-4">
+
+<h5 class="fw-semibold text-primary mb-2">
+{{ course.title }}
+</h5>
+
+<p class="text-muted small mb-3">
+{{ course.description|truncatechars:80 }}
+</p>
+
+<!-- INSTRUCTOR -->
+<div class="d-flex align-items-center border-top pt-3">
+
+<!-- IMAGE -->
+{% if course.instructor and course.instructor.image %}
+    <img src="{{ course.instructor.image.url }}"
+         class="rounded-circle tutor-avatar me-3"
+         alt="instructor">
+{% else %}
+    <img src="{% static 'img/user.png' %}"
+         class="rounded-circle tutor-avatar me-3"
+         alt="instructor">
+{% endif %}
+
+<!-- NAME -->
+<div>
+    <div class="fw-semibold small">
+        {% if course.instructor %}
+            {{ course.instructor.full_name }}
+        {% else %}
+            Unassigned
+        {% endif %}
+    </div>
+
+    <small class="text-muted">Instructor</small>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</a>
+
+</div>
+
+{% empty %}
+
+<div class="col-12 text-center text-muted py-5">
+<i class="bi bi-journal-x fs-1"></i>
+<p class="mt-3">No courses available</p>
+</div>
+
+{% endfor %}
+
+</div>
+
+</div>
+
 </body>
 </html>

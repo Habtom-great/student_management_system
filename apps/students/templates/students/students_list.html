@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}Students List{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>👨‍🎓 Students List</h2>
+
+    <a href="/students/add/" class="btn btn-primary">
+        ➕ Add Student
+    </a>
+</div>
+
+<!-- SEARCH BAR -->
+<div class="mb-3">
+    <input type="text" class="form-control" placeholder="Search students...">
+</div>
+
+<!-- TABLE -->
+<div class="card shadow-sm">
+    <div class="card-body">
+
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+
+                <thead class="table-dark">
+                    <tr>
+                        <th>#</th>
+                        <th>Full Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Department</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <!-- SAMPLE DATA (replace with Django loop later) -->
+                    <tr>
+                        <td>1</td>
+                        <td>John Doe</td>
+                        <td>john@example.com</td>
+                        <td>0912345678</td>
+                        <td>Computer Science</td>
+                        <td><span class="badge bg-success">Active</span></td>
+                        <td>
+                            <a href="/students/edit/1/" class="btn btn-sm btn-warning">Edit</a>
+                            <a href="/students/delete/1/" class="btn btn-sm btn-danger">Delete</a>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>2</td>
+                        <td>Sarah Ali</td>
+                        <td>sarah@example.com</td>
+                        <td>0922334455</td>
+                        <td>Accounting</td>
+                        <td><span class="badge bg-success">Active</span></td>
+                        <td>
+                            <a href="/students/edit/2/" class="btn btn-sm btn-warning">Edit</a>
+                            <a href="/students/delete/2/" class="btn btn-sm btn-danger">Delete</a>
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

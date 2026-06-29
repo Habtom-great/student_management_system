@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}Student Management System{% endblock %}</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+{% load static %}
+<link rel="stylesheet" href="{% static 'students/css/style.css' %}">
+</head>
+
+<body>
+<div class="app">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="brand">
+      Registrar
+      <small>Django LMS</small>
+    </div>
+
+    <nav>
+      <a href="{% url 'students' %}" class="nav-btn">Students hhhhh</a>
+      <a href="{% url 'courses' %}" class="nav-btn">Courses</a>
+      <a href="{% url 'instructors' %}" class="nav-btn">Instructors</a>
+      <a href="{% url 'exams' %}" class="nav-btn">Exams</a>
+      <a href="{% url 'payments' %}" class="nav-btn">Payments</a>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+</div>
+
+<script src="{% static 'students/js/app.js' %}"></script>
+</body>
+</html>
