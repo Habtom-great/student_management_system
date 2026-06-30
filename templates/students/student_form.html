@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Add Student</title>
+
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -47,11 +48,7 @@
             border: 1px solid #ddd;
             border-radius: 6px;
             font-size: 13px;
-        }
-
-        textarea {
-            resize: none;
-            height: 60px;
+            width: 100%;
         }
 
         .full {
@@ -87,6 +84,41 @@
             font-size: 12px;
             border-radius: 20px;
         }
+
+        .alert {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+
+        .alert-danger {
+            background: #ffe6e6;
+            color: #c0392b;
+        }
+
+        .alert-success {
+            background: #e6ffed;
+            color: #27ae60;
+        }
+
+        .top-links {
+            display: flex;
+            gap: 10px;
+        }
+
+        .link-btn {
+            text-decoration: none;
+            font-size: 12px;
+            padding: 6px 10px;
+            border-radius: 5px;
+            background: #34495e;
+            color: white;
+        }
+
+        .link-btn:hover {
+            background: #2c3e50;
+        }
     </style>
 </head>
 
@@ -96,9 +128,37 @@
 
     <div class="header">
         <h2>➕ Add Student</h2>
-        <span class="badge">LMS Admin</span>
+
+        <div class="top-links">
+            <a href="{% url 'home' %}" class="link-btn">🏠 Dashboard</a>
+            <a href="{% url 'students:student_list' %}" class="link-btn">⬅ Back</a>
+        </div>
     </div>
 
+    <!-- SUCCESS / ERROR MESSAGES -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- FORM ERRORS -->
+    {% if form.errors %}
+    <div class="alert alert-danger">
+        <strong>Please fix errors below:</strong>
+        <ul>
+            {% for field in form %}
+                {% for error in field.errors %}
+                    <li>{{ field.label }}: {{ error }}</li>
+                {% endfor %}
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    <!-- FORM -->
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
 
@@ -106,17 +166,17 @@
         <div class="row">
             <div class="form-group">
                 <label>First Name</label>
-                <input type="text" name="first_name" required>
+                {{ form.first_name }}
             </div>
 
             <div class="form-group">
                 <label>Middle Name</label>
-                <input type="text" name="middle_name">
+                {{ form.middle_name }}
             </div>
 
             <div class="form-group">
                 <label>Last Name</label>
-                <input type="text" name="last_name" required>
+                {{ form.last_name }}
             </div>
         </div>
 
@@ -124,12 +184,12 @@
         <div class="row">
             <div class="form-group">
                 <label>Email</label>
-                <input type="email" name="email" required>
+                {{ form.email }}
             </div>
 
             <div class="form-group">
                 <label>Phone</label>
-                <input type="text" name="phone">
+                {{ form.phone }}
             </div>
         </div>
 
@@ -137,24 +197,24 @@
         <div class="row">
             <div class="form-group">
                 <label>City</label>
-                <input type="text" name="city">
+                {{ form.city }}
             </div>
 
             <div class="form-group">
                 <label>Sub City</label>
-                <input type="text" name="sub_city">
+                {{ form.sub_city }}
             </div>
 
             <div class="form-group">
                 <label>Woreda</label>
-                <input type="text" name="woreda">
+                {{ form.woreda }}
             </div>
         </div>
 
         <div class="row">
             <div class="form-group full">
                 <label>House Number</label>
-                <input type="text" name="house_number">
+                {{ form.house_number }}
             </div>
         </div>
 
@@ -162,16 +222,12 @@
         <div class="row">
             <div class="form-group">
                 <label>Status</label>
-                <select name="status">
-                    <option value="Active">Active</option>
-                    <option value="Inactive">Inactive</option>
-                    <option value="Suspended">Suspended</option>
-                </select>
+                {{ form.status }}
             </div>
 
             <div class="form-group">
                 <label>Profile Image</label>
-                <input type="file" name="photo">
+                {{ form.photo }}
             </div>
         </div>
 
@@ -184,4 +240,3 @@
 
 </body>
 </html>
-
